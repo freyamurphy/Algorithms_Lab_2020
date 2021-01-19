@@ -26,20 +26,31 @@ int bruteForce(const std::vector<int>& bits)
 {
     int evenPairs = 0;
 
-    for (int i = 0; i < bits.size(); i++)
+    for (int i = 0; i < (int)bits.size(); i++)
     {
-        for (int j = i; j < bits.size(); j++)
+        for (int j = i; j < (int)bits.size(); j++)
         {
+            // DEBUG
+            //std::cout << "i=" << i << " j=" << j << " "; 
             int sum = 0;
-            for (int k = i; k < j; k++)
+            for (int k = i; k <= j; k++)
             {
+                // DEBUG
+                //std::cout << bits.at(k) << " ";
                 sum += bits.at(k);
             }
 
             if (sum % 2 == 0)
             {
                 evenPairs++;
+                // DEBUG
+                //std::cout << "EVEN" << std::endl;
             }
+            // DEBUG
+            //else
+            //{
+                //std::cout << "ODD" << std::endl;
+            //}
         }
     }
 
