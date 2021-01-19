@@ -12,40 +12,55 @@ void readInput(std::vector<int>& bits)
     }
 }
 
-int partialSums(const std::vector<int>& bits)
-{
-    int evenPairs = 0;
+/* From https://www.geeksforgeeks.org/space-and-time-efficient-binomial-coefficient/ 
+   (I tried using the factorial formula but it was giving me division by 0 errors,
+    probably due to int overflow.)
+*/
+int nChooseK(int n, int k) 
+{ 
+    int res = 1; 
+  
+    // Since C(n, k) = C(n, n-k) 
+    if (k > n - k) 
+        k = n - k; 
+  
+    // Calculate value of 
+    // [n * (n-1) *---* (n-k+1)] / [k * (k-1) *----* 1] 
+    for (int i = 0; i < k; ++i) { 
+        res *= (n - i); 
+        res /= (i + 1); 
+    } 
+  
+    return res; 
+} 
 
+int fasterPartialSums(const std::vector<int>& bits)
+{
     std::vector<int> partialSums;
     int sum = 0;
+    int E = 0; // number of partial sums that are even
+    int O = 0; // number of partial sums that are odd
     for (std::vector<int>::const_iterator it = bits.begin(); it != bits.end(); it++)
     {
         sum += *it;
         partialSums.push_back(sum);
+
+        if (sum % 2 == 0) 
+            E++;
+        else
+            O++;
     }
+    int evenPairs = nChooseK(E, 2);
+    int oddPairs = nChooseK(O, 2);
 
-    for (size_t i = 0; i < bits.size(); i++)
-    {        
-        for (size_t j = i; j < bits.size(); j++)
-        {
-            int sum = 0;
-            if (i == 0) 
-                sum = partialSums.at(j);
-            else
-                sum = partialSums.at(j) - partialSums.at(i-1);
-
-            if (sum % 2 == 0) evenPairs++;
-        }        
-    }
-
-    return evenPairs;
+    return evenPairs + oddPairs + E;
 }
 
 void solveTest()
 {
     std::vector<int> bits;
     readInput(bits);
-    std::cout << partialSums(bits) << std::endl;
+    std::cout << fasterPartialSums(bits) << std::endl;
 }
 
 int main()
