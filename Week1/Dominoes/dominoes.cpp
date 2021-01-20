@@ -1,26 +1,6 @@
 #include <iostream>
 #include <vector>
 
-/* DEBUG */
-void printVector(const std::vector<int>& v)
-{
-    for (std::vector<int>::const_iterator it = v.begin(); it != v.end(); it++)
-    {
-        std::cout << *it << " ";
-    }
-    std::cout << std::endl;
-}
-
-/* DEBUG */
-void printVector(const std::vector<bool>& v)
-{
-    for (std::vector<bool>::const_iterator it = v.begin(); it != v.end(); it++)
-    {
-        std::cout << *it << " ";
-    }
-    std::cout << std::endl;
-}
-
 void readInput(std::vector<int>& dominoes)
 {
     dominoes.clear();
@@ -30,7 +10,6 @@ void readInput(std::vector<int>& dominoes)
         int h; std::cin >> h; // height of domino
         dominoes.push_back(h);
     }
-    //printVector(dominoes);
 }
 
 int countFallen(const std::vector<int>& dominoes)
@@ -45,7 +24,7 @@ int countFallen(const std::vector<int>& dominoes)
         {
             for (size_t j = i + 1; j < dominoes.size(); j++)
             {
-                if (j - i < dominoes.at(i))
+                if ((int)j - (int)i < dominoes.at(i))
                 {
                     fallen.at(j) = true;
                 }
@@ -65,7 +44,6 @@ void solveTest()
 {
     std::vector<int> dominoes;
     readInput(dominoes);
-    //printVector(dominoes);
     std::cout << countFallen(dominoes) << std::endl;
 }
 
