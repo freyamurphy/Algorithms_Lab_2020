@@ -21,16 +21,30 @@ int guaranteedWinnings(const std::vector<int>& coins, std::vector<std::vector<in
       return 0;
   }
 
-  int chooseLeft = coins.at(left) + guaranteedWinnings(coins, memo, left + 1, right, !myTurn);
-  int chooseRight = coins.at(right) + guaranteedWinnings(coins, memo, left, right - 1, !myTurn);
+  if (memo.at(left).at(right) == -1)
+  {
+    int chooseLeft = coins.at(left) + guaranteedWinnings(coins, memo, left + 1, right, !myTurn);
+    int chooseRight = coins.at(right) + guaranteedWinnings(coins, memo, left, right - 1, !myTurn);
 
-  int winnings = 0;
-  if (myTurn)
-    winnings = std::max(chooseLeft, chooseRight);
-  else
-    winnings = std::min(chooseLeft - coins.at(left), chooseRight - coins.at(right));
+    int winnings = 0;
+    if (myTurn)
+      winnings = std::max(chooseLeft, chooseRight);
+    else
+      winnings = std::min(chooseLeft - coins.at(left), chooseRight - coins.at(right));
 
-  return winnings;
+    memo.at(left).at(right) = winnings;
+  }
+  
+  return memo.at(left).at(right);
+}
+
+void initialiseMemo(std::vector<std::vector<int> >& memo, int n)
+{
+  for (int i = 0; i < n; i++)
+  {
+    std::vector<int> row(n, -1);
+    memo.push_back(row);
+  }
 }
 
 void solveTest()
@@ -39,6 +53,7 @@ void solveTest()
   std::vector<int> coins;
   readCoins(coins, n);
   std::vector<std::vector<int> > memo;
+  initialiseMemo(memo, n);
   std::cout << guaranteedWinnings(coins, memo, 0, coins.size()-1, true) << std::endl;
 }
 
